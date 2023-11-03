@@ -222,38 +222,23 @@ get_unique_phenotype_counts <- function(processed_cell_data, min_count = 0, samp
 
 
 # Generates combinatorial matrix with markers to drop
-generate_marker_combinations <- function(n_markers, max_phenotype_length = 0, lower = NULL, upper = NULL, n_threads = 1){
+generate_marker_combinations <- function(n_markers, max_phenotype_length = 1, lower = NULL, upper = NULL, n_threads = 1){
   
-  local_marker_comb <- as.data.frame(RcppAlgos::permuteGeneral(c(1,0), n_markers, repetition = TRUE,
-                                      lower = lower,
-                                      upper = upper
-                                      ))
-
+  valid_permutations <- matrix(1, nrow = 1, ncol = n_markers)
   
-  # KNOWN BUG
-  # if last command returns only one combination
-  # will probably produce a "argument of length 0" error
-  
-  if(max_phenotype_length > 0 & max_phenotype_length < n_markers){
-    
-    comb_list <- as.matrix(local_marker_comb)
-    
-    comb_list <- parallel::mclapply(seq_len(nrow(comb_list)), function(i) comb_list[i,], mc.cores = n_threads)
-    
-    comb_filter <- unlist(parallel::mclapply(comb_list, function(row) (n_markers-sum(row)) <= max_phenotype_length,
-                                             mc.cores = n_threads, mc.preschedule = TRUE, mc.cleanup = TRUE))
-    
-    local_marker_comb <- local_marker_comb[comb_filter,]
-    
-    rm(comb_list, comb_filter)
-    
-    # local_marker_comb <- local_marker_comb[unlist(parallel::mclapply(1:nrow(local_marker_comb),
-    #                                                                  function(i) (n_markers-sum(local_marker_comb[i,])) <= max_phenotype_length,
-    #                                                                  mc.cores = n_threads)),]
+  if (max_phenotype_length > 0) {
+    # Generate valid permutations directly
+    for (ones_count in 1:max_phenotype_length) {
+      ones_positions <- combn(1:n_markers, ones_count)
+      for (i in ncol(ones_positions):1) {
+        perm <- rep(1, n_markers)
+        perm[ones_positions[, i]] <- 0
+        valid_permutations <- rbind(valid_permutations, perm)
+      }
+    }
   }
   
-  return(local_marker_comb)
-  
+  return(valid_permutations)
 }
 
 
