@@ -292,8 +292,8 @@ combinatorial_phenotype_counts <- function(processed_cell_data,
   unique_phen <- get_unique_phenotype_counts(processed_cell_data, min_count, sample_fraction_min_counts, efficient, n_threads)
   
   # Create all combination of markers
-  
-  print_log("Generating all ", format(2^n_markers, scientific = FALSE), " marker combinations...")
+  total_combinations <- sum(sapply(0:max_phenotype_length, function(x) {choose(n_markers, x)}))
+  print_log("Generating all ", format(total_combinations, scientific = FALSE), " marker combinations...")
   
   marker_combinations <- generate_marker_combinations(n_markers, max_phenotype_length, n_threads = n_threads)
   colnames(marker_combinations) <- markers
