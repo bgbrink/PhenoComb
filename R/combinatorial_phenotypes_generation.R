@@ -237,7 +237,7 @@ generate_marker_combinations <- function(n_markers, max_phenotype_length = 1, lo
       }
     }
   }
-  
+  rownames(valid_permutations) <- NULL
   return(valid_permutations)
 }
 
