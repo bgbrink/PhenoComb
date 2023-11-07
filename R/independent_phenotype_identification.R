@@ -160,6 +160,7 @@ get_independent_relevant_phenotypes <- function(phen_data,
     #Generate network and cluster
     
     g <- igraph::graph_from_adjacency_matrix(local_phen_dist_matrix,mode = "undirected",weighted = TRUE,diag = FALSE)
+    set.seed(4519)
     cluster <- igraph::cluster_louvain(g)
     
     
