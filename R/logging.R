@@ -29,13 +29,15 @@ print_log <- function(..., new_line = TRUE){
   
   if(getOption("PhenoComb.verbose") | !is.null(getOption("PhenoComb.log.file"))){
     
-    time <- paste(c("[", format(Sys.time(), "%y/%m/%d %X"),"] "), collapse = "")
+    txt <- paste(c(..., "\n"), collapse = "")
     
-    txt <- paste(c(time, ...), collapse = "")
-    
-    if(getOption("PhenoComb.verbose")) message(txt)
+    if(getOption("PhenoComb.verbose")) cat(txt)
     
     if(!is.null(getOption("PhenoComb.log.file"))){
+      
+      time <- paste(c("[", format(Sys.time(), "%y/%m/%d %X"),"] "), collapse = "")
+      
+      txt <- paste(c(time, ...), collapse = "")
       
       if(new_line){
         txt <- paste(c(txt, "\n"), collapse = "")
