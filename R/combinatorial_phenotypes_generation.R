@@ -230,11 +230,13 @@ generate_marker_combinations <- function(n_markers, max_phenotype_length = 1, lo
     # Generate valid permutations directly
     for (ones_count in 1:max_phenotype_length) {
       ones_positions <- combn(1:n_markers, ones_count)
-      for (i in ncol(ones_positions):1) {
+      tmp <- lapply(ncol(ones_positions):1, function(i) {
         perm <- rep(1, n_markers)
         perm[ones_positions[, i]] <- 0
-        valid_permutations <- rbind(valid_permutations, perm)
-      }
+        return(perm)
+      })
+      tmp <- do.call(rbind, tmp)
+      valid_permutations <- rbind(valid_permutations, tmp)
     }
   }
   rownames(valid_permutations) <- NULL
