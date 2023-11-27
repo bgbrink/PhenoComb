@@ -222,7 +222,7 @@ get_unique_phenotype_counts <- function(processed_cell_data, min_count = 0, samp
 
 
 # Generates combinatorial matrix with markers to drop
-generate_marker_combinations <- function(n_markers, max_phenotype_length = 1, lower = NULL, upper = NULL, n_threads = 1){
+generate_marker_combinations <- function(n_markers, max_phenotype_length = 1){
   
   valid_permutations <- matrix(1, nrow = 1, ncol = n_markers)
   
@@ -297,7 +297,7 @@ combinatorial_phenotype_counts <- function(processed_cell_data,
   total_combinations <- sum(sapply(0:max_phenotype_length, function(x) {choose(n_markers, x)}))
   print_log("Generating all ", format(total_combinations, scientific = FALSE), " marker combinations...")
   
-  marker_combinations <- generate_marker_combinations(n_markers, max_phenotype_length, n_threads = n_threads)
+  marker_combinations <- generate_marker_combinations(n_markers, max_phenotype_length)
   colnames(marker_combinations) <- markers
   
   # Select parent population
