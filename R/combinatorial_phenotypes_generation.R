@@ -224,15 +224,15 @@ get_unique_phenotype_counts <- function(processed_cell_data, min_count = 0, samp
 # Generates combinatorial matrix with markers to drop
 generate_marker_combinations <- function(n_markers, max_phenotype_length = 1){
   
-  valid_permutations <- matrix(1, nrow = 1, ncol = n_markers)
+  valid_permutations <- matrix(as.integer(1), nrow = 1, ncol = n_markers)
   
   if (max_phenotype_length > 0) {
     # Generate valid permutations directly
     for (ones_count in 1:max_phenotype_length) {
       ones_positions <- combn(1:n_markers, ones_count)
       tmp <- lapply(ncol(ones_positions):1, function(i) {
-        perm <- rep(1, n_markers)
-        perm[ones_positions[, i]] <- 0
+        perm <- rep(as.integer(1), n_markers)
+        perm[ones_positions[, i]] <- as.integer(0)
         return(perm)
       })
       tmp <- do.call(rbind, tmp)
